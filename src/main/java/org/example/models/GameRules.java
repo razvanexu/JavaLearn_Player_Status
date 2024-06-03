@@ -1,2 +1,5 @@
-package org.example.models;public class GameRules {
+package org.example.models;
+
+public class GameRules {
+
 }

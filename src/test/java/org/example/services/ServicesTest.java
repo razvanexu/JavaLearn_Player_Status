@@ -5,10 +5,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class ServicesTest {
 
     @org.junit.jupiter.api.Test
-    void updateScore() {
+    void updateScoreService() {
+
+        //Given
+
+        //When
+
+        //Then
     }
 
     @org.junit.jupiter.api.Test
-    void weaponValidator() {
+    void weaponValidatorService() {
+
+        //Given
+
+        //When
+
+        //Then
     }
 }
