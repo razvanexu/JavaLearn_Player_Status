@@ -1,12 +1,13 @@
 package org.example.models;
 
-import org.example.enums.Weapons;
-import org.example.services.Services;
+import org.example.enums.*;
+import org.example.services.*;
 
-import static org.example.enums.Weapons.fist;
+import static org.example.enums.Weapons.*;
 import static org.example.services.Services.*;
 
 public class PlayerStatus {
+    private static final String GAME_NAME = "UNREAL";
     private String nickname;
     private int score;
     private int lives;
@@ -14,7 +15,6 @@ public class PlayerStatus {
     private WeaponModel weaponInHand;
     private double positionX;
     private double positionY;
-    private String gameName;
 
     public boolean shouldAttackOpponent(PlayerStatus opponent) {
         if (opponent.getWeaponInHand() == weaponInHand) {
@@ -29,20 +29,15 @@ public class PlayerStatus {
         return weaponInHand;
     }
 
-    public void setWeaponInHand(Weapons weapon) {
-        if (!weaponValidatorService(weapon, this.score)) {
-            weaponInHand.setName(fist);
-        } else {
-            weaponInHand.setName(weapon);
+    public void setWeaponInHand(WeaponModel weapon, Weapons weaponType) {
+        weaponInHand = new WeaponModel(FIST);
+        if (!canBuyWeapon(weapon, score)) {
+            weaponInHand.setName(weaponType);
         }
     }
 
     public String getGameName() {
-        return gameName;
-    }
-
-    private void setGameName(String gameName) {
-        this.gameName = gameName;
+        return GAME_NAME;
     }
 
     public void initPlayer(String nickname) {
@@ -74,9 +69,6 @@ public class PlayerStatus {
 
     public int getLives() {
         return lives;
-    }
-
-    private void setLives(int lives) {
     }
 
     public int getHealth() {
