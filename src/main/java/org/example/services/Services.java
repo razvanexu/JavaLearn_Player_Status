@@ -2,21 +2,19 @@ package org.example.services;
 
 import org.example.models.*;
 
-public class Services {
+public class Services implements IServices {
 
-    private Services() {
+    public Services() {
     }
 
-    public static int updateScoreService(WeaponModel weapon, int playerScore) {
-        return playerScore - weapon.getCost();
-    }
-
-    public static boolean canBuyWeapon(WeaponModel weapon, int playerScore) {
+    @Override
+    public boolean canBuyWeapon(WeaponModel weapon, int playerScore) {
 
         return playerScore >= weapon.getCost();
     }
 
-    public static boolean isPerfectNumber(int artifactCode) {
+    @Override
+    public boolean isPerfectNumber(int artifactCode) {
         long sum = 0;
         boolean isPerfect = false;
 
@@ -31,7 +29,8 @@ public class Services {
         return isPerfect;
     }
 
-    public static boolean isPrime(int artifact) {
+    @Override
+    public boolean isPrime(int artifact) {
         if (artifact <= 1) {
             return false;
         }
@@ -44,40 +43,28 @@ public class Services {
         return true;
     }
 
-    public static boolean isTrap(int artifact) {
+    @Override
+    public boolean isTrap(int artifact) {
         return isSumDivBy3(artifact) && isEven(artifact);
     }
 
-    private static boolean isSumDivBy3(int artifact) {
-        int sum = 0;
-        int num = artifact;
-
-        while (num != 0) {
-            sum += num % 10;
-            num /= 10;
-        }
-
-        return sum % 3 == 0;
-    }
-
-    private static boolean isEven(int artifact) {
-        return artifact % 2 == 0;
-    }
-
-    public static boolean winProbability(PlayerStatus opponent, int health, int score) {
+    @Override
+    public boolean winProbability(PlayerStatus opponent, int health, int score) {
         var opponentWinProb = (3 * opponent.getHealth() + opponent.getScore() / 1000) / 4;
         var myWinProb = (3 * health + score / 1000) / 4;
 
         return myWinProb > opponentWinProb;
     }
 
-    public static double getDistance(PlayerStatus opponent, double posX, double posY) {
+    @Override
+    public double getDistance(PlayerStatus opponent, double posX, double posY) {
         double ac = Math.abs(opponent.getPositionX() - posX);
         double cb = Math.abs(opponent.getPositionY() - posY);
         return Math.hypot(ac, cb);
     }
 
-    public static boolean winDuel(PlayerStatus opponent, double distance, WeaponModel myWeapon) {
+    @Override
+    public boolean winDuel(PlayerStatus opponent, double distance, WeaponModel myWeapon) {
         opponent.getWeaponInHand().setCombatValue(distance);
         myWeapon.setCombatValue(distance);
 

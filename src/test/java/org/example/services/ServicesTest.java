@@ -5,6 +5,7 @@ import org.example.models.*;
 import org.junit.jupiter.api.*;
 
 class ServicesTest {
+    private final IServices service = new Services();
 
     @org.junit.jupiter.api.Test
     void updateScoreService() {
@@ -18,21 +19,19 @@ class ServicesTest {
         Assertions.assertEquals(gave, exp);
     }
 
-
     @org.junit.jupiter.api.Test
     void canBuyWeaponTest_ShouldReturnFalse() {
 
         //Given
-        PlayerStatus player = new PlayerStatus();
         WeaponModel weapon = new WeaponModel(Weapons.KNIFE);
+        int score = 100;
 
         //When
+        var result = service.canBuyWeapon(weapon, score);
 
-        player.setWeaponInHand(weapon, Weapons.SNIPER);
         //Then
-
+        Assertions.assertFalse(result);
 
     }
-
 
 }

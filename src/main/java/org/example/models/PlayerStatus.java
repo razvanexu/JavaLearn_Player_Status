@@ -4,10 +4,10 @@ import org.example.enums.*;
 import org.example.services.*;
 
 import static org.example.enums.Weapons.*;
-import static org.example.services.Services.*;
 
 public class PlayerStatus {
     private static final String GAME_NAME = "UNREAL";
+    private final IServices service;
     private String nickname;
     private int score;
     private int lives;
@@ -16,12 +16,16 @@ public class PlayerStatus {
     private double positionX;
     private double positionY;
 
+    public PlayerStatus(IServices service) {
+        this.service = service;
+    }
+
     public boolean shouldAttackOpponent(PlayerStatus opponent) {
         if (opponent.getWeaponInHand() == weaponInHand) {
-            return winProbability(opponent, health, score);
+            return service.winProbability(opponent, health, score);
         } else {
-            var distance = getDistance(opponent, positionX, positionY);
-            return winDuel(opponent, distance, weaponInHand);
+            var distance = service.getDistance(opponent, positionX, positionY);
+            return service.winDuel(opponent, distance, weaponInHand);
         }
     }
 
@@ -31,8 +35,9 @@ public class PlayerStatus {
 
     public void setWeaponInHand(WeaponModel weapon, Weapons weaponType) {
         weaponInHand = new WeaponModel(FIST);
-        if (!canBuyWeapon(weapon, score)) {
+        if (service.canBuyWeapon(weapon, score)) {
             weaponInHand.setName(weaponType);
+            this.score -= weapon.getCost();
         }
     }
 
@@ -64,7 +69,7 @@ public class PlayerStatus {
     }
 
     public void setScore(int score) {
-        this.score = Services.updateScoreService(weaponInHand, score);
+        this.score = score;
     }
 
     public int getLives() {
@@ -100,15 +105,15 @@ public class PlayerStatus {
     }
 
     public void findArtifactCode(int artifactCode) {
-        if (isPerfectNumber(artifactCode)) {
+        if (service.isPerfectNumber(artifactCode)) {
             score += 5000;
             lives++;
             health = 100;
-        } else if (isPrime(artifactCode)) {
+        } else if (service.isPrime(artifactCode)) {
             score += 1000;
             lives += 2;
             health += 25;
-        } else if (isTrap(artifactCode)) {
+        } else if (service.isTrap(artifactCode)) {
             score -= 3000;
             health -= 25;
         } else {
