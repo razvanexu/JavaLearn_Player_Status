@@ -1,6 +1,6 @@
 package org.example.models;
 
-import org.example.enums.Weapons;
+import org.example.enums.*;
 
 public class WeaponModel {
     private String name;
@@ -14,19 +14,19 @@ public class WeaponModel {
 
     private void setCostAndValue(Weapons name) {
         switch (name) {
-            case fist:
+            case FIST:
                 this.cost = 0;
                 this.combatValue = 1;
                 break;
-            case knife:
+            case KNIFE:
                 this.cost = 1000;
                 this.combatValue = 2;
                 break;
-            case sniper:
+            case SNIPER:
                 this.cost = 10_000;
                 this.combatValue = getCombatValue();
                 break;
-            case kalashnikov:
+            case KALASHNIKOV:
                 this.cost = 20_000;
                 this.combatValue = getCombatValue();
                 break;

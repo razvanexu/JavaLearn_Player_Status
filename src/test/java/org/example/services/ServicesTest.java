@@ -1,6 +1,8 @@
 package org.example.services;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.example.enums.*;
+import org.example.models.*;
+import org.junit.jupiter.api.*;
 
 class ServicesTest {
 
@@ -8,19 +10,29 @@ class ServicesTest {
     void updateScoreService() {
 
         //Given
-
+        int gave = 3;
+        int exp = 5;
         //When
 
         //Then
+        Assertions.assertEquals(gave, exp);
     }
+
 
     @org.junit.jupiter.api.Test
-    void weaponValidatorService() {
+    void canBuyWeaponTest_ShouldReturnFalse() {
 
         //Given
+        PlayerStatus player = new PlayerStatus();
+        WeaponModel weapon = new WeaponModel(Weapons.KNIFE);
 
         //When
 
+        player.setWeaponInHand(weapon, Weapons.SNIPER);
         //Then
+
+
     }
+
+
 }

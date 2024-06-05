@@ -1,35 +1,19 @@
 package org.example.services;
 
-import org.example.enums.Weapons;
-import org.example.models.PlayerStatus;
-import org.example.models.WeaponModel;
-
-import static org.example.enums.Weapons.*;
+import org.example.models.*;
 
 public class Services {
+
+    private Services() {
+    }
 
     public static int updateScoreService(WeaponModel weapon, int playerScore) {
         return playerScore - weapon.getCost();
     }
 
-    public static boolean weaponValidatorService(Weapons weapon, int playerScore) {
+    public static boolean canBuyWeapon(WeaponModel weapon, int playerScore) {
 
-        boolean isValid = false;
-
-        if (playerScore >= 1000 && playerScore < 20_000 && weapon == fist ||
-                playerScore >= 1000 && playerScore < 10_000 && weapon == knife) {
-            isValid = true;
-        } else if (playerScore >= 1000 && playerScore < 30_000 && weapon == fist ||
-                playerScore >= 1000 && playerScore < 30_000 && weapon == knife ||
-                playerScore >= 1000 && playerScore < 30_000 && weapon == sniper) {
-            isValid = true;
-        } else if (playerScore >= 1000 && weapon == fist ||
-                playerScore >= 1000 && weapon == knife ||
-                playerScore >= 1000 && weapon == sniper ||
-                playerScore >= 1000 && weapon == kalashnikov) {
-            isValid = true;
-        }
-        return isValid;
+        return playerScore >= weapon.getCost();
     }
 
     public static boolean isPerfectNumber(int artifactCode) {
