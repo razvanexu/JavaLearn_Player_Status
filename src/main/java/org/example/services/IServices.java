@@ -23,11 +23,7 @@ public interface IServices {
         return sum % 3 == 0;
     }
 
-    default boolean isEven(int artifact) {
-        return artifact % 2 == 0;
-    }
-
-    boolean winProbability(PlayerStatus opponent, int health, int score);
+    boolean myWinProbability(PlayerStatus opponent, int health, int score);
 
     double getDistance(PlayerStatus opponent, double posX, double posY);
 

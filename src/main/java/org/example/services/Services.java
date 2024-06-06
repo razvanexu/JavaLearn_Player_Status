@@ -5,6 +5,7 @@ import org.example.models.*;
 public class Services implements IServices {
 
     public Services() {
+        //empty constructor
     }
 
     @Override
@@ -23,7 +24,10 @@ public class Services implements IServices {
                 sum += i;
             }
         }
-        if (sum == artifactCode) {
+
+        if (artifactCode == 0) {
+            return isPerfect;
+        } else if (sum == artifactCode) {
             isPerfect = true;
         }
         return isPerfect;
@@ -35,7 +39,7 @@ public class Services implements IServices {
             return false;
         }
 
-        for (int i = 2; i < Math.sqrt(artifact); i++) {
+        for (int i = 2; i < artifact; i++) {
             if (artifact % i == 0) {
                 return false;
             }
@@ -45,15 +49,15 @@ public class Services implements IServices {
 
     @Override
     public boolean isTrap(int artifact) {
-        return isSumDivBy3(artifact) && isEven(artifact);
+        return isSumDivBy3(artifact) && artifact % 2 == 0;
     }
 
     @Override
-    public boolean winProbability(PlayerStatus opponent, int health, int score) {
+    public boolean myWinProbability(PlayerStatus opponent, int health, int score) {
         var opponentWinProb = (3 * opponent.getHealth() + opponent.getScore() / 1000) / 4;
         var myWinProb = (3 * health + score / 1000) / 4;
 
-        return myWinProb > opponentWinProb;
+        return myWinProb >= opponentWinProb;
     }
 
     @Override

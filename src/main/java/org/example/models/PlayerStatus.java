@@ -22,7 +22,7 @@ public class PlayerStatus {
 
     public boolean shouldAttackOpponent(PlayerStatus opponent) {
         if (opponent.getWeaponInHand() == weaponInHand) {
-            return service.winProbability(opponent, health, score);
+            return service.myWinProbability(opponent, health, score);
         } else {
             var distance = service.getDistance(opponent, positionX, positionY);
             return service.winDuel(opponent, distance, weaponInHand);
@@ -76,12 +76,16 @@ public class PlayerStatus {
         return lives;
     }
 
+    public void setLives(int lives) {
+        this.lives += lives;
+    }
+
     public int getHealth() {
         return health;
     }
 
     public void setHealth(int health) {
-        this.health -= health;
+        this.health += health;
         if (this.health < 0) {
             lives--;
             this.health = 100;
@@ -106,16 +110,16 @@ public class PlayerStatus {
 
     public void findArtifactCode(int artifactCode) {
         if (service.isPerfectNumber(artifactCode)) {
-            score += 5000;
-            lives++;
-            health = 100;
+            setScore(5000);
+            setLives(1);
+            setHealth(100);
         } else if (service.isPrime(artifactCode)) {
-            score += 1000;
-            lives += 2;
-            health += 25;
+            setScore(1000);
+            setLives(2);
+            setHealth(25);
         } else if (service.isTrap(artifactCode)) {
-            score -= 3000;
-            health -= 25;
+            setScore(-3000);
+            setHealth(-25);
         } else {
             score += artifactCode;
         }
