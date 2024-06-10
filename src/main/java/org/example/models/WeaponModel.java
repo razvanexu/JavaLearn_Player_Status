@@ -3,17 +3,17 @@ package org.example.models;
 import org.example.enums.*;
 
 public class WeaponModel {
-    private String name;
+    private Weapons weaponName;
     private int cost;
     private int combatValue;
 
     public WeaponModel(Weapons weapon) {
-        this.name = weapon.toString();
-        setCostAndValue(weapon);
+        this.weaponName = weapon;
+        setCostAndValue();
     }
 
-    private void setCostAndValue(Weapons name) {
-        switch (name) {
+    private void setCostAndValue() {
+        switch (weaponName) {
             case FIST:
                 this.cost = 0;
                 this.combatValue = 1;
@@ -38,21 +38,29 @@ public class WeaponModel {
     }
 
     public void setCombatValue(double distance) {
-        if (distance > 1000) {
-            this.combatValue = 4;
+        if (weaponName == Weapons.SNIPER) {
+            if (distance > 1000) {
+                combatValue = 4;
+            } else {
+                combatValue = 3;
+            }
+        } else if (weaponName == Weapons.KALASHNIKOV && distance <= 1000) {
+            combatValue = 4;
+        } else {
+            combatValue = 3;
         }
-        this.combatValue = 3;
+
     }
 
     public int getCost() {
         return cost;
     }
 
-    public String getName() {
-        return name;
+    public Weapons getWeaponName() {
+        return weaponName;
     }
 
-    public void setName(Weapons weapon) {
-        this.name = weapon.toString();
+    public void setWeaponName(Weapons weapon) {
+        this.weaponName = weapon;
     }
 }

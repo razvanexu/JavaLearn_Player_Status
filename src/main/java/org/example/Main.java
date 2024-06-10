@@ -2,11 +2,14 @@ package org.example;
 
 
 import org.example.models.*;
+import org.example.services.*;
 
 public class Main {
     public static void main(String[] args) {
 
-        PlayerStatus player = new PlayerStatus();
+
+        IServices service = new Services();
+        PlayerStatus player = new PlayerStatus(service);
         player.initPlayer("Jane Doe");
     }
 }
