@@ -23,9 +23,9 @@ public interface IServices {
         return sum % 3 == 0;
     }
 
-    boolean myWinProbability(PlayerStatus opponent, int health, int score);
+    boolean myWinProbability(PlayerStatus opponent, PlayerStatus self);
 
-    double getDistance(PlayerStatus opponent, double posX, double posY);
+    double getDistance(PlayerStatus opponent, PlayerStatus self);
 
-    boolean winDuel(PlayerStatus opponent, double distance, WeaponModel myWeapon);
+    boolean opponentWins(PlayerStatus opponent, double distance, WeaponModel myWeapon);
 }

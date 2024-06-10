@@ -17,7 +17,6 @@ public class Services implements IServices {
     @Override
     public boolean isPerfectNumber(int artifactCode) {
         long sum = 0;
-        boolean isPerfect = false;
 
         for (int i = 1; i <= artifactCode / 2; i++) {
             if (artifactCode % i == 0) {
@@ -25,12 +24,7 @@ public class Services implements IServices {
             }
         }
 
-        if (artifactCode == 0) {
-            return isPerfect;
-        } else if (sum == artifactCode) {
-            isPerfect = true;
-        }
-        return isPerfect;
+        return artifactCode != 0 && sum == artifactCode;
     }
 
     @Override
@@ -53,22 +47,22 @@ public class Services implements IServices {
     }
 
     @Override
-    public boolean myWinProbability(PlayerStatus opponent, int health, int score) {
-        var opponentWinProb = (3 * opponent.getHealth() + opponent.getScore() / 1000) / 4;
-        var myWinProb = (3 * health + score / 1000) / 4;
+    public boolean myWinProbability(PlayerStatus opponent, PlayerStatus self) {
+        double opponentWinProb = (3 * opponent.getHealth() + (double) opponent.getScore() / 1000) / 4;
+        double myWinProb = (3 * self.getHealth() + self.getScore() / (double) 1000) / 4;
 
         return myWinProb >= opponentWinProb;
     }
 
     @Override
-    public double getDistance(PlayerStatus opponent, double posX, double posY) {
-        double ac = Math.abs(opponent.getPositionX() - posX);
-        double cb = Math.abs(opponent.getPositionY() - posY);
+    public double getDistance(PlayerStatus opponent, PlayerStatus self) {
+        double ac = Math.abs(opponent.getPositionX() - self.getPositionX());
+        double cb = Math.abs(opponent.getPositionY() - self.getPositionY());
         return Math.hypot(ac, cb);
     }
 
     @Override
-    public boolean winDuel(PlayerStatus opponent, double distance, WeaponModel myWeapon) {
+    public boolean opponentWins(PlayerStatus opponent, double distance, WeaponModel myWeapon) {
         opponent.getWeaponInHand().setCombatValue(distance);
         myWeapon.setCombatValue(distance);
 

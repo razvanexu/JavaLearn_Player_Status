@@ -3,15 +3,13 @@ package org.example.models;
 import org.example.enums.*;
 import org.example.services.*;
 
-import static org.example.enums.Weapons.*;
-
 public class PlayerStatus {
     private static final String GAME_NAME = "UNREAL";
     private final IServices service;
     private String nickname;
-    private int score;
-    private int lives;
-    private int health = 100;
+    private int score = 0;
+    private int lives = 3;
+    private int health;
     private WeaponModel weaponInHand;
     private double positionX;
     private double positionY;
@@ -20,12 +18,12 @@ public class PlayerStatus {
         this.service = service;
     }
 
-    public boolean shouldAttackOpponent(PlayerStatus opponent) {
-        if (opponent.getWeaponInHand() == weaponInHand) {
-            return service.myWinProbability(opponent, health, score);
+    public boolean shouldAttackOpponent(PlayerStatus opponent, PlayerStatus self) {
+        if (opponent.getWeaponInHand() == self.getWeaponInHand()) {
+            return service.myWinProbability(opponent, self);
         } else {
-            var distance = service.getDistance(opponent, positionX, positionY);
-            return service.winDuel(opponent, distance, weaponInHand);
+            var distance = service.getDistance(opponent, self);
+            return service.opponentWins(opponent, distance, weaponInHand);
         }
     }
 
@@ -33,12 +31,14 @@ public class PlayerStatus {
         return weaponInHand;
     }
 
-    public void setWeaponInHand(WeaponModel weapon, Weapons weaponType) {
-        weaponInHand = new WeaponModel(FIST);
+    public boolean setWeaponInHand(WeaponModel weapon) {
+        weaponInHand = new WeaponModel(Weapons.FIST);
         if (service.canBuyWeapon(weapon, score)) {
-            weaponInHand.setName(weaponType);
+            weaponInHand = weapon;
             this.score -= weapon.getCost();
+            return true;
         }
+        return false;
     }
 
     public String getGameName() {
@@ -86,7 +86,7 @@ public class PlayerStatus {
 
     public void setHealth(int health) {
         this.health += health;
-        if (this.health < 0) {
+        if (this.health <= 0) {
             lives--;
             this.health = 100;
         }
@@ -99,13 +99,21 @@ public class PlayerStatus {
         return positionX;
     }
 
-    public void movePlayer(double newPosX, double newPosY) {
-        positionX += newPosX;
-        positionY += newPosY;
+    public void setPositionX(double posX) {
+        positionX = posX;
     }
 
     public double getPositionY() {
         return positionY;
+    }
+
+    public void setPositionY(double positionY) {
+        this.positionY = positionY;
+    }
+
+    public void movePlayer(double newPosX, double newPosY) {
+        positionX += newPosX;
+        positionY += newPosY;
     }
 
     public void findArtifactCode(int artifactCode) {
@@ -119,6 +127,9 @@ public class PlayerStatus {
             setHealth(25);
         } else if (service.isTrap(artifactCode)) {
             setScore(-3000);
+            if (score < 0) {
+                setScore(0);
+            }
             setHealth(-25);
         } else {
             score += artifactCode;

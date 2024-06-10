@@ -163,21 +163,165 @@ class ServicesTest {
     void myWinProbability_ShouldReturnTrueIfLowerOpponent() {
         //Given
         PlayerStatus opp = new PlayerStatus(service);
-        int oppHealth, oppScore, myHealth, myScore;
+        PlayerStatus self = new PlayerStatus(service);
 
         //When
-        myHealth = 50;
-        myScore = 200;
-        oppHealth = -90;
-        oppScore = 150;
-        opp.setScore(oppScore);
-        opp.setHealth(oppHealth);
+        self.setHealth(50);
+        self.setScore(200);
+        opp.setScore(-90);
+        opp.setHealth(150);
 
-        var result = service.myWinProbability(opp, myHealth, myScore);
+        var result = service.myWinProbability(opp, self);
 
         //Then
         Assertions.assertTrue(result);
     }
 
-    
+    @Test
+    void myWinProbability_ShouldReturnFalseIfHigherOpponent() {
+        //Given
+        PlayerStatus opp = new PlayerStatus(service);
+        PlayerStatus self = new PlayerStatus(service);
+
+        //When
+        self.setScore(90);
+        self.setHealth(50);
+        opp.setScore(190);
+        opp.setHealth(250);
+
+        var result = service.myWinProbability(opp, self);
+
+        //Then
+        Assertions.assertFalse(result);
+    }
+
+
+    @Test
+    void getDistanceBetweenSamePoints_ShouldReturn0() {
+
+        //Given
+        PlayerStatus opp = new PlayerStatus(service);
+        PlayerStatus self = new PlayerStatus(service);
+
+        //When
+        self.setPositionX(0);
+        self.setPositionY(0);
+        opp.setPositionX(0);
+        opp.setPositionY(0);
+
+        var result = service.getDistance(opp, self);
+
+        //then
+        Assertions.assertEquals(0, result, "distance is 0");
+    }
+
+    @Test
+    void getDistanceBetweenSamePoints_ShouldReturn5() {
+
+        //Given
+        PlayerStatus opp = new PlayerStatus(service);
+        PlayerStatus self = new PlayerStatus(service);
+
+        //When
+        self.setPositionX(1);
+        self.setPositionY(2);
+        opp.setPositionX(4);
+        opp.setPositionY(6);
+
+        var result = service.getDistance(opp, self);
+
+        //then
+        Assertions.assertEquals(5, result, "distance is 5");
+    }
+
+    @Test
+    void getDistanceBetweenSamePoints_ShouldReturn5WithNegativeValues() {
+
+        //Given
+        PlayerStatus opp = new PlayerStatus(service);
+        PlayerStatus self = new PlayerStatus(service);
+
+        //When
+        self.setPositionX(-1);
+        self.setPositionY(-2);
+        opp.setPositionX(-4);
+        opp.setPositionY(-6);
+
+        var result = service.getDistance(opp, self);
+
+        //then
+        Assertions.assertEquals(5, result, "distance is 5");
+    }
+
+    @Test
+    void opponentWins_ShouldReturnTrueWhenOpponentSniperDistanceGreaterThan1000() {
+
+        //Given
+        PlayerStatus opp = new PlayerStatus(service);
+        PlayerStatus self = new PlayerStatus(service);
+        WeaponModel oppWeapon;
+        WeaponModel myWeapon;
+        double distance;
+
+        //When
+        oppWeapon = new WeaponModel(Weapons.SNIPER);
+        myWeapon = new WeaponModel(Weapons.KALASHNIKOV);
+        opp.setScore(250000000);
+        self.setScore(50000);
+        opp.setWeaponInHand(oppWeapon);
+        self.setWeaponInHand(myWeapon);
+        distance = 10001;
+
+        //Then
+        var result = service.opponentWins(opp, distance, myWeapon);
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    void opponentWins_ShouldReturnTrueWhenOpponentKalashDistanceSmallerThan1000() {
+
+        //Given
+        PlayerStatus opp = new PlayerStatus(service);
+        PlayerStatus self = new PlayerStatus(service);
+        WeaponModel oppWeapon;
+        WeaponModel myWeapon;
+        double distance;
+
+        //When
+        oppWeapon = new WeaponModel(Weapons.KALASHNIKOV);
+        myWeapon = new WeaponModel(Weapons.SNIPER);
+        opp.setScore(250000000);
+        self.setScore(50000);
+        opp.setWeaponInHand(oppWeapon);
+        self.setWeaponInHand(myWeapon);
+        distance = 999;
+
+        //Then
+        var result = service.opponentWins(opp, distance, myWeapon);
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    void opponentWins_ShouldReturnTrueWhenOpponentKnifeVSMyKakash() {
+
+        //Given
+        PlayerStatus opp = new PlayerStatus(service);
+        PlayerStatus self = new PlayerStatus(service);
+        WeaponModel oppWeapon;
+        WeaponModel myWeapon;
+        double distance;
+
+        //When
+        oppWeapon = new WeaponModel(Weapons.KNIFE);
+        myWeapon = new WeaponModel(Weapons.KALASHNIKOV);
+        opp.setScore(250000000);
+        self.setScore(50000);
+        opp.setWeaponInHand(oppWeapon);
+        self.setWeaponInHand(myWeapon);
+        distance = 999;
+
+        //Then
+        var result = service.opponentWins(opp, distance, myWeapon);
+        Assertions.assertFalse(result);
+    }
 }
